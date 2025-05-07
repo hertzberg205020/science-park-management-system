@@ -1,0 +1,56 @@
+.login {
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    width: 1200px;
+    height: 720px;
+    display: flex;
+    justify-content: center;
+    align-items: space-between;
+
+    .login-background {
+      background-size: cover;
+      background-position: center;
+      width: calc(100% - (364px + 20px + 20px));
+      height: 100%;
+    }
+
+    .part {
+      width: 364px;
+      height: 580px;
+      padding: 140px 20px 0 20px;
+      background-color: white;
+      margin-left: auto;
+
+      .title {
+        margin-bottom: 50px;
+
+        .logo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        h1 {
+          text-align: center;
+          font-size: 36px;
+          font-weight: 600;
+          color: #027cc5;
+          margin-top: 40px;
+        }
+      }
+    }
+  }
+
+
+}
