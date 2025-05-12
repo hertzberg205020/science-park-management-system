@@ -5,7 +5,7 @@ import './index.scss'
 import { Button, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import http from '@/utils/http/http';
+import { login } from '@/api/users';
 
 
 function Login() {
@@ -23,22 +23,12 @@ function Login() {
 
   useEffect(() => {
 
-    http({
-      url: '/login',
-      method: 'post',
-      data: {
-        username: 'admin',
-        password: '123456'
-      }
-    })
-      .then((response) => {
-        console.log('Response:', response);
-      }
-      )
-      .catch((error) => {
-        console.error('Error:', error);
-      }
-      );
+    login({
+      username: 'admin',
+      password: '123456'
+    }).then(res => {
+      console.log(res);
+    });
   }, []);
 
   function handleSubmit() {

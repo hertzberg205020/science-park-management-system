@@ -3,6 +3,7 @@ import { message } from "antd";
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
 
+// encapsulation the axios instance
 const http: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
