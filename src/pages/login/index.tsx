@@ -4,6 +4,8 @@ import loginBackground from '@/assets/login-background.png'
 import './index.scss'
 import { Button, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useEffect } from 'react';
+import http from '@/utils/http/http';
 
 
 function Login() {
@@ -18,6 +20,26 @@ function Login() {
   };
 
   const [form] = Form.useForm();
+
+  useEffect(() => {
+
+    http({
+      url: '/login',
+      method: 'post',
+      data: {
+        username: 'admin',
+        password: '123456'
+      }
+    })
+      .then((response) => {
+        console.log('Response:', response);
+      }
+      )
+      .catch((error) => {
+        console.error('Error:', error);
+      }
+      );
+  }, []);
 
   function handleSubmit() {
     form.validateFields()
