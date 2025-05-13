@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from "axios";
 import { message } from "antd";
+import { store } from '@/store';
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
 
@@ -14,7 +15,13 @@ const http: AxiosInstance = axios.create({
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Add any custom request headers or configurations here
-    console.log("Request Interceptor", config);
+
+    const { token } = store.getState().authSlice;
+
+    if (token) {
+      config.headers.set('Authorization', `Bearer ${token}`);
+    }
+
     return config;
   }
 );
