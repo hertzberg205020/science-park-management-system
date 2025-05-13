@@ -38,7 +38,7 @@ function Login() {
       // 將 token 存入 Redux store
       dispatch(setToken(token));
       // 導向首頁
-      navigate('/');
+      navigate('/', { replace: true });
       // 處理登入成功
       console.log('Login successful:', token);
 
