@@ -1,5 +1,9 @@
 import Mock from 'mockjs';
 
+// simulate network delay 200-600ms
+Mock.setup({
+  timeout: '200-600'
+});
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
 
