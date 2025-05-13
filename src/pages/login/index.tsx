@@ -4,11 +4,15 @@ import loginBackground from '@/assets/login-background.png'
 import './index.scss'
 import { Button, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useEffect } from 'react';
 import { login } from '@/api/users';
+import { useDispatch } from 'react-redux';
+import { setToken } from '@/store/login/authSlice';
 
 
 function Login() {
+  // hook
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   const backgroundStyle: React.CSSProperties = {
     backgroundImage: `url(${backgroundPicture})`,
@@ -19,28 +23,23 @@ function Login() {
     backgroundImage: `url(${loginBackground})`,
   };
 
-  const [form] = Form.useForm();
 
-  useEffect(() => {
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
 
-    login({
-      username: 'admin',
-      password: '123456'
-    }).then(res => {
-      console.log(res);
-    });
-  }, []);
 
-  function handleSubmit() {
-    form.validateFields()
-      .then(values => {
-        console.log('Received values:', values);
-        // Handle login logic here
-      })
-      .catch(errorInfo => {
-        console.error('Validation failed:', errorInfo);
-      });
-  }
+      const { token } = await login(values);
+      // 將 token 存入 Redux store
+      dispatch(setToken(token));
+      // 處理登入成功
+      console.log('Login successful:', token);
+
+    } catch (error) {
+      console.error('Login failed:', error);
+      // 處理登入失敗
+    }
+  };
 
   return (
     <div className='login' style={backgroundStyle}>
@@ -56,10 +55,11 @@ function Login() {
           </div>
           <Form
             form={form}
+            onFinish={handleSubmit}
           >
             <Form.Item
-              label="Username"
-              name="username"
+              label="Account"
+              name="account"
               rules={[{ required: true, message: 'Please input your username!' }]}
             >
               <Input placeholder='輸入帳號' prefix={<UserOutlined />} />
@@ -74,7 +74,7 @@ function Login() {
             </Form.Item>
 
             <Form.Item label={null}>
-              <Button type="primary" style={{ width: '100%' }} onClick={handleSubmit} >
+              <Button type="primary" style={{ width: '100%' }} htmlType="submit" >
                 登入
               </Button>
             </Form.Item>
