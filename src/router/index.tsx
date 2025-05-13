@@ -1,3 +1,4 @@
+import RequireAuth from '@/utils/RequireAuth';
 import React from 'react';
 import { createBrowserRouter } from 'react-router';
 
@@ -9,11 +10,17 @@ const NotFound = React.lazy(() => import('../pages/notFound'));
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: (
+      <RequireAuth allowAnonymous={false} redirectPath="/login">
+        <Home />
+      </RequireAuth>)
   },
   {
     path: '/login',
-    element: <Login />,
+    element: (
+      <RequireAuth allowAnonymous={true} redirectPath="/">
+        <Login />
+      </RequireAuth>),
   },
   {
     path: '*',
