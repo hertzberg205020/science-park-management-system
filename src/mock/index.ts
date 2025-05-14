@@ -1,4 +1,5 @@
 import Mock from 'mockjs';
+import { menuList, userMenuList, managerMenuList } from './menus';
 
 // simulate network delay 200-600ms
 Mock.setup({
@@ -56,3 +57,34 @@ Mock.mock(`${BASE_URL}/login`, "post", (options: any): any => {
   return response;
 
 });
+
+
+// menu web API
+Mock.mock(`${BASE_URL}/menu`, "get", () => {
+  const token = sessionStorage.getItem("token");
+  if (token == "mocktoken123456admin") {
+    return {
+      code: 200,
+      message: 'success',
+      data: menuList
+    }
+  } else if (token == "mocktoken123456user") {
+    return {
+      code: 200,
+      message: 'success',
+      data: userMenuList
+    }
+  } else if (token == "mocktoken123456manager") {
+    return {
+      code: 200,
+      message: 'success',
+      data: managerMenuList
+    }
+  } else {
+    return {
+      code: 200,
+      message: "fail",
+      data: []
+    }
+  }
+})
