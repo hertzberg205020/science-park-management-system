@@ -7,6 +7,7 @@ Mock.setup({
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(`${BASE_URL}/login`, "post", (options: any): any => {
 
   const { account, password } = JSON.parse(options.body);
