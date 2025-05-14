@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -6,7 +6,7 @@ export const authSlice = createSlice({
     token: sessionStorage.getItem('token') || null,
   },
   reducers: {
-    setToken: (state, action) => {
+    setToken: (state, action: PayloadAction<string>) => {
       // save token to redux state
       state.token = action.payload;
       // save token to sessionStorage

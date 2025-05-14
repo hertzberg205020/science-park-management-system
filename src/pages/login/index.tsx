@@ -5,16 +5,16 @@ import './index.scss'
 import { Button, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '@/api/users';
-import { useDispatch } from 'react-redux';
 import { setToken } from '@/store/login/authSlice';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
+import { useAppDispatch } from '@/store';
 
 
 function Login() {
   // hook
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
