@@ -42,6 +42,9 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
         console.error("Error fetching menu data:", error);
       }
     };
+    // the callback function in useEffect can not be async
+    // because it will return a promise
+    // so we need to define a function and call it
     fetchMenuData();
   }, []);
 
