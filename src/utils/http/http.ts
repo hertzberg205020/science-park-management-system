@@ -4,6 +4,10 @@ import { store } from '@/store';
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
 
+export const isRequestSuccess = (statusCode: number): boolean => {
+  return statusCode >= 200 && statusCode < 300;
+};
+
 // encapsulation the axios instance
 const http: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -32,13 +36,11 @@ http.interceptors.response.use((config: AxiosResponse) => {
 
   const rsp = config.data;
 
-  if (rsp.code !== 200) {
+  if (!isRequestSuccess(rsp.code)) {
     message.error(`${rsp.code}: ${rsp.message}`);
     return Promise.reject(new Error(rsp.message));
   }
 
-
-  console.log("Response Interceptor", config);
   return config.data;
 })
 
