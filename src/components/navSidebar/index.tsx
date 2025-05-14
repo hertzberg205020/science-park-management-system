@@ -1,8 +1,9 @@
 import { getMenu, type MenuItemInRow } from '@/api/users';
-
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import icons from './icons';
+import logo from '@/assets/logo.png';
+import './index.scss';
 
 interface MenuItem {
   key: string;
@@ -49,9 +50,12 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
   }, []);
 
 
-
   return (
-    <div>
+    <div className='nav-left'>
+      <div className="logo">
+        <img src={logo} alt='Smart Park' width={18} />
+        <h1>Smart</h1>
+      </div>
       <Menu
         defaultSelectedKeys={['/dashboard']}
         mode="inline"
