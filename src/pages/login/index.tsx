@@ -32,11 +32,13 @@ function Login() {
     try {
       const values = await form.validateFields();
       setLoading(true);
-      const { token } = await login(values);
+      const { token, account } = await login(values);
       setLoading(false);
 
       // 將 token 存入 Redux store
       dispatch(setToken(token));
+      // save account to sessionStorage
+      sessionStorage.setItem('account', account);
       // 導向首頁
       navigate('/', { replace: true });
       // 處理登入成功
