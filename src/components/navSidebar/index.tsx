@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import icons from './icons';
 import logo from '@/assets/logo.png';
 import './index.scss';
+import { useAppDispatch } from '@/store';
+import { setMenuList } from '@/store/login/authSlice';
 
 interface MenuItem {
   key: string;
@@ -32,11 +34,13 @@ function convertToMenuItem(nodes: MenuItemInRow[]): MenuItem[] {
 
 const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
   const [menuData, setMenuData] = useState<MenuItem[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
         const data = await getMenu();
+        dispatch(setMenuList(data)); // Assuming setMenuList is an action to store menu data in Redux
         const convertedData = convertToMenuItem(data);
         setMenuData(convertedData);
       } catch (error) {
