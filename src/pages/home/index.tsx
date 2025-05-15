@@ -14,7 +14,10 @@ const Home: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider
+        width={240}
+        collapsible
+        collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <NavSidebar collapsed={collapsed} />
       </Sider>
       <Layout>
