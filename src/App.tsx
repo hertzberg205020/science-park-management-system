@@ -23,7 +23,7 @@ function App() {
 
   const { token } = useAppSelector(state => state.authSlice);
   const dispatch = useAppDispatch();
-  const [routeTree, setRouteTree] = useState<RouteObject[]>([...BASE_ROUTES]);
+  const [routeTree, setRouteTree] = useState<RouteObject[] | null>(null);
 
   useEffect(() => {
     const buildMenu = async () => {
@@ -32,7 +32,6 @@ function App() {
         // const rootRoute = baseRoutes.find(route => route.path === '/');
         let menuRoutes: RouteObject[] = [];
         const res = await getMenu();
-        console.log('res', res);
 
         if (res && res.length > 0) {
           dispatch(setMenuList(res));
@@ -46,8 +45,13 @@ function App() {
         const rootIndex = updatedRoutes.findIndex(route => route.path === '/');
         if (rootIndex >= 0 && menuRoutes.length > 0) {
           updatedRoutes[rootIndex].children = menuRoutes;
+          const dashboardRoute = updatedRoutes[rootIndex]
+            .children
+            .find(route => route.path === '/dashboard');
+          if (dashboardRoute) {
+            dashboardRoute.index = true;
+          }
         }
-
 
         setRouteTree(updatedRoutes);
       }
@@ -59,16 +63,21 @@ function App() {
     buildMenu();
   }, [token, dispatch]);
 
-  // 只在 routeTree 變動時重新建立 router 實例
-  const router = useMemo(() => createBrowserRouter(routeTree), [routeTree]);
 
-  return (
+  const router = useMemo(() => {
+    if (routeTree) {
+      return createBrowserRouter(routeTree);
+    }
+    return createBrowserRouter(BASE_ROUTES);
+  }, [routeTree]);
+
+  return routeTree ? (
     <>
       <Suspense fallback={<p>Loading...</p>}>
         <RouterProvider router={router} />
       </Suspense>
     </>
-  )
+  ) : (<div>載入中...</div>)
 }
 
 export default App
