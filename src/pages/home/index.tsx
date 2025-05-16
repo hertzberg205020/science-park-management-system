@@ -3,6 +3,7 @@ import { Layout, theme } from 'antd';
 import NavSidebar from '@/components/navSidebar';
 import CustomBreadcrumb from '@/components/breadCrumb';
 import LayoutHeader from '@/components/layoutHeader';
+import { Outlet } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Bill is a cat.
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

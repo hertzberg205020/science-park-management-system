@@ -1,11 +1,11 @@
-import { getMenu, type MenuItemInRow } from '@/api/users';
+import { type MenuItemInRow } from '@/api/users';
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import icons from './icons';
 import logo from '@/assets/logo.png';
 import './index.scss';
-import { useAppDispatch } from '@/store';
-import { setMenuList } from '@/store/login/authSlice';
+import { useAppSelector } from '@/store';
+import { useNavigate } from 'react-router';
 
 interface MenuItem {
   key: string;
@@ -32,26 +32,26 @@ function convertToMenuItem(nodes: MenuItemInRow[]): MenuItem[] {
   });
 }
 
+
+
 const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
-  const [menuData, setMenuData] = useState<MenuItem[]>([]);
-  const dispatch = useAppDispatch();
+  const [menuTree, setMenuTree] = useState<MenuItem[]>([]);
+  const data = useAppSelector(state => state.authSlice.menuList);
+  const { token } = useAppSelector(state => state.authSlice);
+  const navigate = useNavigate();
+
+  const handleMenuItemClick = ({ key }: { key: string }) => {
+    // Handle menu item click
+    navigate(key);
+
+  }
+
 
   useEffect(() => {
-    const fetchMenuData = async () => {
-      try {
-        const data = await getMenu();
-        dispatch(setMenuList(data)); // Assuming setMenuList is an action to store menu data in Redux
-        const convertedData = convertToMenuItem(data);
-        setMenuData(convertedData);
-      } catch (error) {
-        console.error("Error fetching menu data:", error);
-      }
-    };
-    // the callback function in useEffect can not be async
-    // because it will return a promise
-    // so we need to define a function and call it
-    fetchMenuData();
-  }, []);
+
+    const convertedData = convertToMenuItem(data);
+    setMenuTree(convertedData);
+  }, [data, token]);
 
 
   return (
@@ -65,7 +65,8 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
-        items={menuData}
+        items={menuTree}
+        onClick={handleMenuItemClick}
       />
     </div>
   )
