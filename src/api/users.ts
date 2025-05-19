@@ -22,7 +22,7 @@ export async function login(data: LoginData): Promise<LoginResponse> {
 export interface MenuItemInRow {
   key: string;
   label: string;
-  icon?: string | null;
+  icon?: string;
   children?: MenuItemInRow[] | null;
 }
 
