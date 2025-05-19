@@ -1,6 +1,7 @@
 import { Card, Col, Row } from 'antd';
 import { icons } from './icons';
 import './index.scss'
+import EnergyFigure from './EnergyFigure';
 
 interface CardInfo {
   title: string;
@@ -54,6 +55,13 @@ const Dashboard: React.FC = () => {
     <div className='dashboard'>
       <Row gutter={16}>
         {generateCards(cardData)}
+      </Row>
+      <Row gutter={16} className='mt'>
+        <Col span={12}>
+          <Card title="園區能耗概況" className='card'>
+            <EnergyFigure />
+          </Card>
+        </Col>
       </Row>
     </div>
   );
