@@ -14,8 +14,9 @@ const Home: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100%' }}>
       <Sider
+        // style={{ maxHeight: '100vh', overflow: 'auto' }}
         width={240}
         collapsible
         collapsed={collapsed}
@@ -41,6 +42,7 @@ const Home: React.FC = () => {
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          aaaa
         </Footer>
       </Layout>
     </Layout>
