@@ -58,7 +58,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
     <div className='nav-left'>
       <div className="logo">
         <img src={logo} alt='Smart Park' width={18} />
-        <h1>Smart</h1>
+        {!collapsed && <h1>Smart</h1>}
       </div>
       <Menu
         defaultSelectedKeys={['/dashboard']}
@@ -67,6 +67,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
         inlineCollapsed={collapsed}
         items={menuTree}
         onClick={handleMenuItemClick}
+        style={{ height: '100vh', overflow: 'auto', }}
       />
     </div>
   )

@@ -1,4 +1,52 @@
 .nav-left {
+
+  /* 適用於 Webkit 瀏覽器 (Chrome, Safari, Edge) */
+    ::-webkit-scrollbar {
+      width: 8px;
+      /* 滾動條寬度 */
+      height: 8px;
+      /* 水平滾動條高度 */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a1621;
+      /* 滾動條軌道背景 - 深藍色，配合介面 */
+      border-radius: 4px;
+      /* 圓角 */
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #193046;
+      /* 滾動條滑塊顏色 - 稍微亮一點的藍色 */
+      border-radius: 4px;
+      /* 圓角 */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #274B6F;
+      /* 滑鼠懸停時的顏色 - 更亮一些 */
+    }
+
+    /* 適用於 Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #193046 #0a1621;
+      /* 滑塊顏色 軌道顏色 */
+    }
+
+    /* 針對側邊導航欄的特定調整 */
+    .sidebar-navigation::-webkit-scrollbar-track,
+    .sidebar-menu::-webkit-scrollbar-track {
+      background: #041019;
+      /* 更深的背景色 */
+    }
+
+    .sidebar-navigation::-webkit-scrollbar-thumb,
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: #193046;
+      /* 保持一致的滑塊顏色 */
+    }
+
   .logo {
     display: flex;
     align-items: center;
