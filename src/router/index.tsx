@@ -18,7 +18,7 @@ const BASE_ROUTES: RouteObject[] = [
   {
     path: '/login',
     element: (
-      <RequireAuth allowAnonymous={true} redirectPath="/">
+      <RequireAuth allowAnonymous={true} redirectPath="/dashboard">
         <Login />
       </RequireAuth>),
   },
