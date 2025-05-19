@@ -39,7 +39,7 @@ const LayoutHeader: React.FC = () => {
         // Handle personal settings
         console.log('Personal Settings clicked');
         // Navigate to personal settings page
-        navigate('/personal');
+        navigate('/user-profile');
         break;
       case '2':
         // Handle logout
