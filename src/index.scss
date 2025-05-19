@@ -394,3 +394,18 @@ template {
 .mr {
   margin-right: 15px;
 }
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.clearfix:after {
+  content: "";
+  height: 0;
+  display: block;
+  clear: both;
+}
