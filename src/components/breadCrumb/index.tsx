@@ -67,7 +67,7 @@ const CustomBreadcrumb: React.FC = () => {
 
 
   return (
-    <Breadcrumb items={items} />
+    <Breadcrumb items={items} className='mt mb' />
   );
 };
 
