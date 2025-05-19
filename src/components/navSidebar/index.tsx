@@ -5,7 +5,7 @@ import icons from './icons';
 import logo from '@/assets/logo.png';
 import './index.scss';
 import { useAppSelector } from '@/store';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 interface MenuItem {
   key: string;
@@ -39,6 +39,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
   const data = useAppSelector(state => state.authSlice.menuList);
   const { token } = useAppSelector(state => state.authSlice);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleMenuItemClick = ({ key }: { key: string }) => {
     // Handle menu item click
@@ -62,6 +63,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
       </div>
       <Menu
         defaultSelectedKeys={['/dashboard']}
+        selectedKeys={[location.pathname]}
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
