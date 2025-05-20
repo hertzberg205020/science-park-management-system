@@ -79,6 +79,7 @@ const Users: React.FC = () => {
     contact: ''
   });
   const [total, setTotal] = useState<number>(0);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -87,6 +88,15 @@ const Users: React.FC = () => {
       [name]: value
     }));
   }
+
+  const onSelectChange = (selectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(selectedRowKeys);
+  }
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   const loadData = useCallback(async () => {
     // 模擬 API 請求
@@ -108,6 +118,7 @@ const Users: React.FC = () => {
       console.error('Error fetching data:', error);
     }
   }, [page, pageSize, searchOpt]);
+
   useEffect(() => { loadData(); }, [loadData]);
 
   return (
@@ -142,6 +153,7 @@ const Users: React.FC = () => {
           dataSource={dataList}
           loading={loading}
           rowKey={(record) => record.id}
+          rowSelection={rowSelection}
         />
       </Card>
     </div>
