@@ -1,12 +1,15 @@
 const energyFigureConfig = {
   title: {
-    text: 'Daily Energy Consumption',
+    text: 'Daily Energy',
+    left: 'left',
+    top: 0 // 或 '2%'
   },
   tooltip: {
     trigger: 'axis'
   },
   legend: {
-    data: []
+    data: [],
+    top: 'auto'// 或 '8%'
   },
   grid: {
     left: '%',
