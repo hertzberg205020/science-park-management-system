@@ -409,3 +409,23 @@ template {
   display: block;
   clear: both;
 }
+
+.search {
+  .ant-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+   span {
+      margin-right: 10px;
+    }
+  }
+}
+
+.tr {
+  text-align: right;
+}
+
+.tc {
+  text-align: center;
+}
