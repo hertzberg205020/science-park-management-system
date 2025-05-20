@@ -2,6 +2,7 @@ import { Card, Col, Row } from 'antd';
 import { icons } from './icons';
 import './index.scss'
 import EnergyFigure from './EnergyFigure';
+import BarFigure from './BarFigure';
 
 interface CardInfo {
   title: string;
@@ -60,6 +61,11 @@ const Dashboard: React.FC = () => {
         <Col span={12}>
           <Card title="園區能耗概況" className='card'>
             <EnergyFigure />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="園區產值概況" className='card'>
+            <BarFigure />
           </Card>
         </Col>
       </Row>
