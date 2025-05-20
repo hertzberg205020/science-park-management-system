@@ -6,6 +6,14 @@ import { getClientList } from '@/api/client-list';
 
 const columns: TableProps<CompanyDataType>['columns'] = [
   {
+    title: 'No.',
+    key: 'index',
+    align: 'center',
+    render(_value: string, _record: CompanyDataType, index: number) {
+      return index + 1;
+    }
+  },
+  {
     title: 'Enterprise',
     dataIndex: 'name',
     key: 'name',
@@ -56,8 +64,15 @@ const columns: TableProps<CompanyDataType>['columns'] = [
   {
     title: 'Action',
     key: 'action',
-    dataIndex: 'action',
     align: 'center',
+    render: () => {
+      return (
+        <>
+          <Button type='primary' size='small'>Edit</Button>
+          <Button type='primary' size='small' danger className='ml'>Delete</Button>
+        </>
+      );
+    }
   }
 ];
 
