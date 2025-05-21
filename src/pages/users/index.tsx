@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, Pagination, Row, Table, type PaginationProps, type TableProps } from 'antd';
+import { Button, Card, Col, Input, Pagination, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
 import { useCallback, useEffect, useState } from 'react';
 import { getClientList } from '@/api/client-list';
@@ -27,6 +27,19 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     key: 'status',
     align: 'center',
     width: 100,
+    render(value: string) {
+      const colorMap: Record<string, string> = {
+        '核准設立': 'green',
+        '停業': 'red',
+        '解散': 'orange',
+        '撤銷': 'purple',
+        '廢止': 'blue'
+      };
+      const color = colorMap[value] || 'default';
+      return (
+        <Tag color={color}>{value}</Tag>
+      );
+    }
   },
   {
     title: 'Contact',
