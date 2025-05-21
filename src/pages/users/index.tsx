@@ -1,7 +1,7 @@
-import { Button, Card, Col, Input, Pagination, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
+import { Button, Card, Col, Input, message, Pagination, Popconfirm, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
-import { useEffect, useState } from 'react';
-import { getClientList } from '@/api/client-list';
+import { useEffect, useMemo, useState } from 'react';
+import { deleteClient, getClientList } from '@/api/client-list';
 
 
 const columns: TableProps<CompanyDataType>['columns'] = [
@@ -87,14 +87,6 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     title: 'Action',
     key: 'action',
     align: 'center',
-    render: () => {
-      return (
-        <>
-          <Button type='primary' size='small'>Edit</Button>
-          <Button type='primary' size='small' danger className='ml'>Delete</Button>
-        </>
-      );
-    }
   }
 ];
 
@@ -106,6 +98,7 @@ interface searchType {
 
 
 const Users: React.FC = () => {
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [dataList, setDataList] = useState<CompanyDataType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -176,8 +169,16 @@ const Users: React.FC = () => {
 
         setTotal(total);
         setDataList(list);
+        // const preSelectedKeys = [...selectedRowKeys];
+        // const selectedKeys = preSelectedKeys.length ?
+        //   list.filter(item => preSelectedKeys
+        //     .includes(item.id))
+        //     .map(item => item.id) :
+        //   [];
+        setSelectedRowKeys([]);
       }
       catch (error) {
+        message.error('Failed to fetch data');
         console.error('Error fetching data:', error);
       }
       finally {
@@ -186,7 +187,50 @@ const Users: React.FC = () => {
     }
 
     loadData();
-  }, [page, pageSize, searchOpt]);
+  }, [page, pageSize, searchOpt, refreshTrigger]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { data } = await deleteClient(id);
+      message.success(data);
+      setRefreshTrigger(prev => prev + 1);
+    }
+    catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  }
+
+  const tableColumns: TableProps<CompanyDataType>['columns'] = useMemo(
+    () =>
+      columns.map((column) => {
+        if (column.key === 'action') {
+          return {
+            ...column,
+            render: (_value, record) => (
+              <>
+                <Button type="primary" size="small">
+                  Edit
+                </Button>
+                <Popconfirm
+                  title="Delete Item"
+                  description="Are you sure to delete this item?"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() => handleDelete(record.id)}
+                  onCancel={() => message.info('Delete cancelled')}
+                >
+                  <Button type="primary" size="small" danger className="ml">
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </>
+            ),
+          };
+        }
+        return column;
+      }),
+    []
+  );
 
   return (
     <div className='users'>
@@ -216,7 +260,7 @@ const Users: React.FC = () => {
       </Card>
       <Card className='mt'>
         <Table
-          columns={columns}
+          columns={tableColumns}
           dataSource={dataList}
           loading={loading}
           rowKey={(record) => record.id}

@@ -175,3 +175,37 @@ Mock.mock(new RegExp(`${BASE_URL}/client-list.*`), "get", (options: any) => {
     })
   }
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Mock.mock(`${BASE_URL}/client/delete`, 'post', (options: any) => {
+  const { id } = JSON.parse(options.body);
+  console.log("刪除客戶", id);
+  return {
+    code: 200,
+    message: "success",
+    data: "刪除成功"
+  }
+})
+
+// 批量刪除
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Mock.mock(`${BASE_URL}/client/batch-delete`, 'post', (options: any) => {
+  const { ids } = JSON.parse(options.body);
+  console.log("ids", ids)
+  return {
+    code: 200,
+    message: "success",
+    data: "刪除成功"
+  }
+})
+
+// 編輯客戶
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Mock.mock(`${BASE_URL}/client/edit`, 'post', (options: any) => {
+  console.log("編輯客戶收到參數", JSON.parse(options.body))
+  return {
+    code: 200,
+    message: "success",
+    data: "操作成功"
+  }
+})

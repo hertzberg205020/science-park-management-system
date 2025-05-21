@@ -1,5 +1,5 @@
 import type { CompanyDataType } from '@/pages/users/interface';
-import { get, type ApiResponse } from '@/utils/http/request';
+import { get, post, type ApiResponse } from '@/utils/http/request';
 
 export function getClientList(data: {
   name: string,
@@ -13,4 +13,8 @@ export function getClientList(data: {
     total: number
   }>> {
   return get('/client-list', data)
+}
+
+export function deleteClient(id: string): Promise<ApiResponse<string>> {
+  return post('/client/delete', { id })
 }
