@@ -5,12 +5,16 @@ import "./mock"
 import '@ant-design/v5-patch-for-react-19';
 import { Provider } from 'react-redux';
 import { store } from './store/index.ts';
+import { ConfigProvider } from 'antd';
+import enUS from 'antd/locale/en_US';
 
 createRoot(document.getElementById('root') as HTMLElement)
   .render(
 
     <Provider store={store}>
-      <App />
+      <ConfigProvider locale={enUS}>
+        <App />
+      </ConfigProvider>
     </Provider>
     ,
   )
