@@ -9,7 +9,7 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     title: 'No.',
     key: 'index',
     align: 'center',
-    width: 50,
+    width: 25,
     render(_value: string, _record: CompanyDataType, index: number) {
       return index + 1;
     }
@@ -19,7 +19,7 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'name',
     key: 'name',
     align: 'center',
-    width: 250,
+    width: 200,
   },
   {
     title: 'Status',
@@ -40,14 +40,14 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'industryCategory',
     key: 'industryCategory',
     align: 'center',
-    width: 200,
+    width: 175,
   },
   {
     title: 'Email',
     dataIndex: 'email',
     key: 'email',
     align: 'center',
-    width: 120,
+    width: 100,
   },
   {
     title: 'Unified Business Number',
@@ -61,14 +61,14 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'industryCode',
     key: 'industryCode',
     align: 'center',
-    width: 120,
+    width: 100,
   },
   {
     title: 'Responsible Person',
     dataIndex: 'responsiblePerson',
     key: 'responsiblePerson',
     align: 'center',
-    width: 120,
+    width: 100,
   },
   {
     title: 'Action',
