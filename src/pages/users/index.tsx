@@ -1,6 +1,6 @@
 import { Button, Card, Col, Input, Pagination, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getClientList } from '@/api/client-list';
 
 
@@ -110,21 +110,16 @@ const Users: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [searchName, setSearchName] = useState<string>('');
+  const [searchPhone, setSearchPhone] = useState<string>('');
+  const [searchContact, setSearchContact] = useState<string>('');
   const [searchOpt, setSearchOpt] = useState<searchType>({
     name: '',
     phone: '',
-    contact: ''
+    contact: '',
   });
   const [total, setTotal] = useState<number>(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSearchOpt((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  }
 
   const onSelectChange = (selectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(selectedRowKeys);
@@ -140,28 +135,58 @@ const Users: React.FC = () => {
     setPageSize(pageSize);
   }
 
-  const loadData = useCallback(async () => {
-    // 模擬 API 請求
-    try {
-      setLoading(true);
-      const { data: { list, total } } = await getClientList({
-        ...searchOpt,
-        page,
-        pageSize
-      });
-      setLoading(false);
+  const handleInputChange = (value: string, setValue: React.Dispatch<React.SetStateAction<string>>) => {
+    setValue(value);
+  }
 
-      setTotal(total);
+  const handleSearch = () => {
+    setSearchOpt({
+      name: searchName,
+      phone: searchPhone,
+      contact: searchContact
+    });
+    setPage(1);
+  }
 
-      setDataList(list);
+  const handleReset = () => {
+    setSearchName('');
+    setSearchPhone('');
+    setSearchContact('');
+    setSearchOpt({
+      name: '',
+      phone: '',
+      contact: ''
+    });
+    setPage(1);
+    setPageSize(10);
+    setSelectedRowKeys([]);
+  }
+
+
+  useEffect(() => {
+    const loadData = async () => {
+      // 模擬 API 請求
+      try {
+        setLoading(true);
+        const { data: { list, total } } = await getClientList({
+          ...searchOpt,
+          page,
+          pageSize
+        });
+
+        setTotal(total);
+        setDataList(list);
+      }
+      catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        setLoading(false);
+      }
     }
-    catch (error) {
-      setLoading(false);
-      console.error('Error fetching data:', error);
-    }
+
+    loadData();
   }, [page, pageSize, searchOpt]);
-
-  useEffect(() => { loadData(); }, [loadData, page, pageSize]);
 
   return (
     <div className='users'>
@@ -169,19 +194,19 @@ const Users: React.FC = () => {
         <Row gutter={16}>
           <Col span={7}>
             <span>Enterprise</span>
-            <Input name='name' value={searchOpt.name} onChange={handleSearchChange} />
+            <Input name='name' value={searchName} onChange={(e) => handleInputChange(e.target.value, setSearchName)} />
           </Col>
           <Col span={7}>
             <span>Contact</span>
-            <Input name='contact' value={searchOpt.contact} onChange={handleSearchChange} />
+            <Input name='contact' value={searchContact} onChange={(e) => handleInputChange(e.target.value, setSearchContact)} />
           </Col>
           <Col span={7}>
             <span>Phone</span>
-            <Input name='phone' value={searchOpt.phone} onChange={handleSearchChange} />
+            <Input name='phone' value={searchPhone} onChange={(e) => handleInputChange(e.target.value, setSearchPhone)} />
           </Col>
           <Col span={3} style={{ paddingLeft: '30px' }}>
-            <Button type='primary' style={{ marginRight: '8px' }}>Search</Button>
-            <Button className='ml'>Reset</Button>
+            <Button type='primary' style={{ marginRight: '8px' }} onClick={handleSearch}>Search</Button>
+            <Button className='ml' onClick={handleReset}>Reset</Button>
           </Col>
         </Row>
       </Card>
@@ -201,6 +226,8 @@ const Users: React.FC = () => {
         <Pagination
           className="fr mt"
           total={total}
+          current={page}
+          pageSize={pageSize}
           showSizeChanger
           showQuickJumper
           showTotal={(total) => `Total ${total} items`}
