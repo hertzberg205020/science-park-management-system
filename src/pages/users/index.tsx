@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, Row, Table, type TableProps } from 'antd';
+import { Button, Card, Col, Input, Pagination, Row, Table, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
 import { useCallback, useEffect, useState } from 'react';
 import { getClientList } from '@/api/client-list';
@@ -18,12 +18,14 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'name',
     key: 'name',
     align: 'center',
+    width: 150,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
     align: 'center',
+    width: 100,
   },
   {
     title: 'Contact',
@@ -36,30 +38,35 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'industryCategory',
     key: 'industryCategory',
     align: 'center',
+    width: 150,
   },
   {
     title: 'Email',
     dataIndex: 'email',
     key: 'email',
     align: 'center',
+    width: 120,
   },
   {
     title: 'Unified Business Number',
     dataIndex: 'unifiedBusinessNumber',
     key: 'unifiedBusinessNumber',
     align: 'center',
+    width: 120,
   },
   {
     title: 'Industry Code',
     dataIndex: 'industryCode',
     key: 'industryCode',
     align: 'center',
+    width: 120,
   },
   {
     title: 'Responsible Person',
     dataIndex: 'responsiblePerson',
     key: 'responsiblePerson',
     align: 'center',
+    width: 120,
   },
   {
     title: 'Action',
@@ -113,6 +120,11 @@ const Users: React.FC = () => {
     onChange: onSelectChange,
   };
 
+  const handlePageChange: PaginationProps['onChange'] = (page, pageSize) => {
+    setPage(page);
+    setPageSize(pageSize);
+  }
+
   const loadData = useCallback(async () => {
     // 模擬 API 請求
     try {
@@ -134,7 +146,7 @@ const Users: React.FC = () => {
     }
   }, [page, pageSize, searchOpt]);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => { loadData(); }, [loadData, page, pageSize]);
 
   return (
     <div className='users'>
@@ -169,8 +181,18 @@ const Users: React.FC = () => {
           loading={loading}
           rowKey={(record) => record.id}
           rowSelection={rowSelection}
+          pagination={false}
+        />
+        <Pagination
+          className="fr mt"
+          total={total}
+          showSizeChanger
+          showQuickJumper
+          showTotal={(total) => `Total ${total} items`}
+          onChange={handlePageChange}
         />
       </Card>
+
     </div>
   );
 };
