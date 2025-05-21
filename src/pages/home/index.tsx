@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ minHeight: '100%' }}>
+    <Layout style={{ height: '100vh' }}>
       <Sider
         // style={{ maxHeight: '100vh', overflow: 'auto' }}
         width={240}
@@ -27,12 +27,20 @@ const Home: React.FC = () => {
         <Header style={{ padding: '0 20px 0 0', background: colorBgContainer, textAlign: 'right' }} >
           <LayoutHeader />
         </Header>
-        <Content style={{ margin: '0 16px' }}>
+        <Content style={{
+          margin: '0 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}>
           <CustomBreadcrumb />
           <div
             style={{
+              flex: 1,
+              minHeight: 0,
               padding: 24,
-              minHeight: 360,
+              overflowY: 'auto',
+              overflowX: 'hidden',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
@@ -42,10 +50,9 @@ const Home: React.FC = () => {
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
-          aaaa
         </Footer>
       </Layout>
-    </Layout>
+    </Layout >
   );
 };
 

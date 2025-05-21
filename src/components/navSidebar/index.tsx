@@ -69,7 +69,6 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
         inlineCollapsed={collapsed}
         items={menuTree}
         onClick={handleMenuItemClick}
-        style={{ height: '100vh', overflow: 'auto', }}
       />
     </div>
   )
