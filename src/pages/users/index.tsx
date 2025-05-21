@@ -9,6 +9,7 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     title: 'No.',
     key: 'index',
     align: 'center',
+    width: 50,
     render(_value: string, _record: CompanyDataType, index: number) {
       return index + 1;
     }
@@ -18,7 +19,7 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'name',
     key: 'name',
     align: 'center',
-    width: 150,
+    width: 250,
   },
   {
     title: 'Status',
@@ -32,13 +33,14 @@ const columns: TableProps<CompanyDataType>['columns'] = [
     dataIndex: 'phoneNumber',
     key: 'phoneNumber',
     align: 'center',
+    width: 175,
   },
   {
     title: 'Industry Category',
     dataIndex: 'industryCategory',
     key: 'industryCategory',
     align: 'center',
-    width: 150,
+    width: 200,
   },
   {
     title: 'Email',
