@@ -98,7 +98,7 @@ interface searchType {
 
 
 const Users: React.FC = () => {
-  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
   const [dataList, setDataList] = useState<CompanyDataType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -193,7 +193,7 @@ const Users: React.FC = () => {
     try {
       const { data } = await deleteClient(id);
       message.success(data);
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger(prev => !prev);
     }
     catch (error) {
       console.error('Error deleting item:', error);
