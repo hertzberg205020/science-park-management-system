@@ -1,7 +1,7 @@
 import { Button, Card, Col, Input, message, Pagination, Popconfirm, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
 import { useEffect, useMemo, useState } from 'react';
-import { deleteClient, getClientList } from '@/api/client-list';
+import { batchDeleteClient, deleteClient, getClientList } from '@/api/client-list';
 
 
 const columns: TableProps<CompanyDataType>['columns'] = [
@@ -113,6 +113,21 @@ const Users: React.FC = () => {
   });
   const [total, setTotal] = useState<number>(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const isBatchDeleteBtnDisabled = useMemo(() => {
+    return selectedRowKeys && selectedRowKeys.length === 0;
+  }
+    , [selectedRowKeys]);
+  const handleBatchDelete = async () => {
+    try {
+      const { data } = await batchDeleteClient([...selectedRowKeys]);
+      message.success(data);
+      setRefreshTrigger(prev => !prev);
+    }
+    catch (error) {
+      console.error('Error deleting items:', error);
+    }
+  }
 
   const onSelectChange = (selectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(selectedRowKeys);
@@ -256,7 +271,12 @@ const Users: React.FC = () => {
       </Card>
       <Card className='mt tr'>
         <Button type='primary' >New Enterprise</Button>
-        <Button danger type='primary' className='ml'>Batch Delete</Button>
+        <Button danger
+          type='primary'
+          className='ml'
+          disabled={isBatchDeleteBtnDisabled}
+          onClick={handleBatchDelete}
+        >Batch Delete</Button>
       </Card>
       <Card className='mt'>
         <Table

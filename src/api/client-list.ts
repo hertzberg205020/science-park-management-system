@@ -18,3 +18,7 @@ export function getClientList(data: {
 export function deleteClient(id: string): Promise<ApiResponse<string>> {
   return post('/client/delete', { id })
 }
+
+export function batchDeleteClient(ids: React.Key[]): Promise<ApiResponse<string>> {
+  return post('/client/batch-delete', { ids })
+}
