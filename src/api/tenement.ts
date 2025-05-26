@@ -1,6 +1,6 @@
 import type { PaginatedResponse } from '@/types/PaginatedResponse';
-import type { TenementDataType } from '@/types/tenement';
-import { get } from '@/utils/http/request';
+import type { CreateTenementDataType, TenementDataType } from '@/types/tenement';
+import { get, post, type ApiResponse } from '@/utils/http/request';
 
 interface GetDataOption {
   page: number;
@@ -9,9 +9,9 @@ interface GetDataOption {
 
 
 /**
- * 取得租戶分頁資訊
+ * 取得 tenement 分頁資訊
  * @param option 查詢參數
- * @returns 分頁後的租戶資料
+ * @returns 分頁後的 tenement 資料
  */
 export async function getData(option: GetDataOption): Promise<PaginatedResponse<TenementDataType>> {
   const response = await get<PaginatedResponse<TenementDataType>>('/tenement', {
@@ -24,4 +24,8 @@ export async function getData(option: GetDataOption): Promise<PaginatedResponse<
     return response.data;
   }
   throw new Error(response.message || 'Failed to fetch data');
+}
+
+export function upsertTenement(data: CreateTenementDataType): Promise<ApiResponse<string>> {
+  return post('/tenement/upsert', data)
 }
