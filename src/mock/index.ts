@@ -278,9 +278,14 @@ function generatePaginatedTenementData(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(new RegExp(`${BASE_URL}/tenement.*`), 'get', (options: any) => {
   const { pageSize, page } = getQueryParams(options.url);
+  // 解析 query string 中的 page 和 pageSize
+  // 如果沒有提供 pageSize，默認為 10
+  const parsedPageSize = parseInt(pageSize, 10) || 10;
+  const parsedPage = parseInt(page, 10) || 1;
+
   console.log("公司列表接收到 query string", page, pageSize);
 
-  const mockData = generatePaginatedTenementData();
+  const mockData = generatePaginatedTenementData(parsedPage, parsedPageSize);
 
   return {
     code: 200,
