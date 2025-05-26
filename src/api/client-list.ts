@@ -22,3 +22,11 @@ export function deleteClient(id: string): Promise<ApiResponse<string>> {
 export function batchDeleteClient(ids: React.Key[]): Promise<ApiResponse<string>> {
   return post('/client/batch-delete', { ids })
 }
+
+type UpsertClientDataType = Omit<CompanyDataType, 'id'> & {
+  id?: string; // 在新增時，ID 可以是可選的
+};
+
+export function upsertClient(data: UpsertClientDataType): Promise<ApiResponse<string>> {
+  return post('/client/upsert', data)
+}

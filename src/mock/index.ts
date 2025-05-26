@@ -201,7 +201,7 @@ Mock.mock(`${BASE_URL}/client/batch-delete`, 'post', (options: any) => {
 
 // 編輯客戶
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Mock.mock(`${BASE_URL}/client/edit`, 'post', (options: any) => {
+Mock.mock(`${BASE_URL}/client/upsert`, 'post', (options: any) => {
   console.log("編輯客戶收到參數", JSON.parse(options.body))
   return {
     code: 200,
