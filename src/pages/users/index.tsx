@@ -1,7 +1,8 @@
 import { Button, Card, Col, Input, message, Pagination, Popconfirm, Row, Table, Tag, type PaginationProps, type TableProps } from 'antd';
 import type { CompanyDataType } from './interface';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { batchDeleteClient, deleteClient, getClientList } from '@/api/client-list';
+import ClientFormModal from './ClientForm';
 
 
 const columns: TableProps<CompanyDataType>['columns'] = [
@@ -113,6 +114,12 @@ const Users: React.FC = () => {
   });
   const [total, setTotal] = useState<number>(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>('');
+  // 定義 ModalMode 為有值域範圍的 string literal type
+  type ModalMode = 'CREATE' | 'EDIT';
+  const [mode, setMode] = useState<ModalMode>('CREATE');
+  const [client, setClient] = useState<CompanyDataType | null>(null);
 
   const isBatchDeleteBtnDisabled = useMemo(() => {
     return selectedRowKeys && selectedRowKeys.length === 0;
@@ -170,6 +177,21 @@ const Users: React.FC = () => {
     setSelectedRowKeys([]);
   }
 
+  const handleModalOpen = (title: string, client?: CompanyDataType) => {
+    setModalTitle(title);
+    setModalVisible(true);
+    setMode(title === 'Create Client' ? 'CREATE' : 'EDIT');
+    setClient(client || null);
+  }
+
+  const handleModalCancel = useCallback(() => {
+    setModalVisible(false);
+    setModalTitle('');
+  }, []);
+
+  const onCreate = () => {
+    handleModalOpen('Create Client');
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -216,14 +238,23 @@ const Users: React.FC = () => {
   }
 
   const tableColumns: TableProps<CompanyDataType>['columns'] = useMemo(
-    () =>
-      columns.map((column) => {
+    () => {
+
+      const onEdit = (record: CompanyDataType) => {
+        handleModalOpen('Edit Client', record);
+      }
+
+      return columns.map((column) => {
         if (column.key === 'action') {
           return {
             ...column,
-            render: (_value, record) => (
+            render: (_value, record: CompanyDataType) => (
               <>
-                <Button type="primary" size="small">
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => onEdit(record)}
+                >
                   Edit
                 </Button>
                 <Popconfirm
@@ -243,12 +274,21 @@ const Users: React.FC = () => {
           };
         }
         return column;
-      }),
+      })
+    },
     []
   );
 
   return (
     <div className='users'>
+      <ClientFormModal
+        visible={modalVisible}
+        onClose={handleModalCancel}
+        title={modalTitle}
+        client={client}
+        mode={mode}
+        onRefresh={() => setRefreshTrigger(prev => !prev)}
+      />
       <Card className='search'>
         <Row gutter={16}>
           <Col span={7}>
@@ -270,7 +310,10 @@ const Users: React.FC = () => {
         </Row>
       </Card>
       <Card className='mt tr'>
-        <Button type='primary' >New Enterprise</Button>
+        <Button
+          type='primary'
+          onClick={() => onCreate()}
+        >New Enterprise</Button>
         <Button danger
           type='primary'
           className='ml'
