@@ -1,5 +1,7 @@
 import Mock from 'mockjs';
 import { menuList, userMenuList, managerMenuList } from './menus';
+import type { TenementDataType } from '@/types/tenement';
+import type { PaginatedResponse } from '@/types/PaginatedResponse';
 
 // simulate network delay 200-600ms
 Mock.setup({
@@ -209,3 +211,80 @@ Mock.mock(`${BASE_URL}/client/upsert`, 'post', (options: any) => {
     data: "操作成功"
   }
 })
+
+const tenementTemplate = {
+  id: '@id',
+  name() {
+    const cities = ['台北', '新北', '桃園', '台中', '台南', '高雄', '新竹', '基隆'];
+    const districts = ['信義', '大安', '中正', '松山', '板橋', '中壢', '西屯', '前鎮'];
+    const types = ['大廈', '公寓', '住宅', '社區', '豪宅', '商辦'];
+
+    return `${Mock.Random.pick(cities)}${Mock.Random.pick(districts)}${Mock.Random.pick(types)}`;
+  },
+  responsiblePerson: '@cname',
+  tel() {
+    // 生成台灣電話號碼格式
+    const areaCode = Mock.Random.pick(['02', '03', '04', '05', '06', '07', '08', '089']);
+    const number = Mock.Random.string('number', 7, 8);
+    return `${areaCode}-${number.substring(0, 4)}-${number.substring(4)}`;
+  },
+  status: '@pick([0, 1, 2])',
+  vacancyRate: function () {
+    return parseFloat(Mock.Random.float(0, 0.4, 2, 2).toFixed(2));
+  },
+  managementFee: function () {
+    const amount = Mock.Random.integer(3000, 20000);
+    return `$${amount.toLocaleString()}`;
+  }
+};
+
+function generateTenementList(pageSize: number): TenementDataType[] {
+  const template = {
+    [`list|${pageSize}`]: [tenementTemplate]
+  };
+
+  const mockData = Mock.mock(template);
+  return mockData.list;
+}
+
+// 生成分頁數據
+function generatePaginatedTenementData(
+  page: number = 1,
+  pageSize: number = 10,
+  total?: number
+): PaginatedResponse<TenementDataType> {
+  // 如果沒有指定總數，隨機生成一個合理的總數
+  const totalRecords = total || Mock.Random.integer(pageSize * 5, pageSize * 20);
+  const totalPages = Math.ceil(totalRecords / pageSize);
+
+  // 計算當前頁應該返回的實際數量
+  const startIndex = (page - 1) * pageSize;
+  const remainingRecords = totalRecords - startIndex;
+  const actualPageSize = Math.min(pageSize, Math.max(0, remainingRecords));
+
+  const data = actualPageSize > 0 ? generateTenementList(actualPageSize) : [];
+
+  return {
+    data,
+    total: totalRecords,
+    page,
+    pageSize,
+    totalPages
+  };
+}
+
+
+// 模擬 API 端點
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Mock.mock(new RegExp(`${BASE_URL}/tenement.*`), 'get', (options: any) => {
+  const { pageSize, page } = getQueryParams(options.url);
+  console.log("公司列表接收到 query string", page, pageSize);
+
+  const mockData = generatePaginatedTenementData();
+
+  return {
+    code: 200,
+    message: "success",
+    data: mockData
+  }
+});
