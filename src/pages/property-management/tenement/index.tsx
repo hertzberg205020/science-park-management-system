@@ -3,6 +3,9 @@ import type { TenementDataType } from '@/types/tenement';
 import { Button, Card, Col, Input, message, Popconfirm, Row, Table, type TableProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import columns from './columns';
+import { useAppDispatch } from '@/store';
+import { clearTenementDatum, setTenementDatum } from '@/store/tenement/tenementSlice';
+import UpsertModal from './UpsertModal';
 
 const Tenement: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,17 +13,35 @@ const Tenement: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [data, setData] = useState<TenementDataType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [mode, setMode] = useState<'CREATE' | 'EDIT'>('CREATE');
+  const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
-  const onEdit = (record: TenementDataType) => {
-    console.log('Edit record:', record);
-    // Implement edit logic here
+
+
+  const onClose = () => {
+    setVisible(false);
+    setModalTitle('');
+    dispatch(clearTenementDatum()); // 清除選中的數據
   };
+
   const handleDelete = async (id: string | number) => {
     console.log('Delete record with id:', id);
     // Implement delete logic here
   }
 
   const tableColumns: TableProps<TenementDataType>['columns'] = useMemo(() => {
+
+    const onEdit = (record: TenementDataType) => {
+      setVisible(true);
+      setModalTitle('Edit Tenement');
+      setMode('EDIT');
+      console.log('Edit record:', record);
+      dispatch(setTenementDatum(record));
+    };
+
     return columns?.map(col => {
       if (col.key === 'action') {
         return {
@@ -55,7 +76,7 @@ const Tenement: React.FC = () => {
       return col;
     })
   }
-    , []);
+    , [dispatch]);
 
   // 分頁改變時的處理函數
   const handleTableChange: TableProps<TenementDataType>['onChange'] = (pagination) => {
@@ -84,19 +105,26 @@ const Tenement: React.FC = () => {
       }
     }
     loadData();
-  }, [currentPage, currentPageSize]);
+  }, [currentPage, currentPageSize, refreshTrigger]);
 
   return (
     <div>
+      <UpsertModal
+        visible={visible}
+        onClose={onClose}
+        title={modalTitle}
+        mode={mode}
+        onRefresh={() => setRefreshTrigger(prev => !prev)}
+      />
       <Card className="search">
         <Row gutter={16}>
           <Col span={4}>
-            <span>大樓名稱</span>
-            <Input></Input>
+            <span style={{ width: '100px' }}>大樓名稱</span>
+            <Input />
           </Col>
           <Col span={4}>
-            <span>負責人</span>
-            <Input></Input>
+            <span style={{ width: '100px' }}>負責人</span>
+            <Input />
           </Col>
           <Col span={4}>
             <Button className="mr" type="primary">查詢</Button>
