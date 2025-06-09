@@ -23,13 +23,21 @@ function App() {
 
   const { token } = useAppSelector(state => state.authSlice);
   const dispatch = useAppDispatch();
+
+  const [isRoutesReady, setIsRoutesReady] = useState<boolean>(false);
   const [routeTree, setRouteTree] = useState<RouteObject[] | null>(null);
 
   useEffect(() => {
     const buildMenu = async () => {
       try {
-        const baseRoutes = [...BASE_ROUTES]
-        // const rootRoute = baseRoutes.find(route => route.path === '/');
+        if (!token) {
+          setRouteTree(BASE_ROUTES);
+          setIsRoutesReady(true);
+          return;
+        }
+        setIsRoutesReady(false);
+
+
         let menuRoutes: RouteObject[] = [];
         const res = await getMenu();
 
@@ -41,7 +49,7 @@ function App() {
           menuRoutes = generateRoutes(menuTree);
         }
 
-        const updatedRoutes: RouteObject[] = [...baseRoutes];
+        const updatedRoutes: RouteObject[] = [...BASE_ROUTES];
         const rootIndex = updatedRoutes.findIndex(route => route.path === '/');
         if (rootIndex >= 0 && menuRoutes.length > 0) {
           updatedRoutes[rootIndex].children = menuRoutes;
@@ -57,6 +65,10 @@ function App() {
       }
       catch (error) {
         console.error('Error fetching menu:', error);
+        setRouteTree(BASE_ROUTES);
+      }
+      finally {
+        setIsRoutesReady(true);
       }
     }
 
@@ -65,13 +77,13 @@ function App() {
 
 
   const router = useMemo(() => {
-    if (routeTree) {
+    if (!isRoutesReady && routeTree) {
       return createBrowserRouter(routeTree);
     }
     return createBrowserRouter(BASE_ROUTES);
-  }, [routeTree]);
+  }, [routeTree, isRoutesReady]);
 
-  return routeTree ? (
+  return isRoutesReady ? (
     <>
       <Suspense fallback={<p>Loading...</p>}>
         <RouterProvider router={router} />
