@@ -6,6 +6,7 @@ import { setMenuList } from './store/login/authSlice';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { generateRoutes, type MenuNode } from './utils/generateRoutes';
 import type { RouteObject } from 'react-router';
+import { Spin } from 'antd';
 
 
 function convertToMenuItem(rows: MenuItemInRow[]): MenuNode[] {
@@ -83,13 +84,13 @@ function App() {
     return createBrowserRouter(BASE_ROUTES);
   }, [routeTree, isRoutesReady]);
 
-  return isRoutesReady ? (
+  return isRoutesReady && router ? (
     <>
       <Suspense fallback={<p>Loading...</p>}>
         <RouterProvider router={router} />
       </Suspense>
     </>
-  ) : (<div>載入中...</div>)
+  ) : (<Spin></Spin>)
 }
 
 export default App
