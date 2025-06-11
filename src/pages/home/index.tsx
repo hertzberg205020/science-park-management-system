@@ -4,6 +4,7 @@ import NavSidebar from '@/components/navSidebar';
 import CustomBreadcrumb from '@/components/breadCrumb';
 import LayoutHeader from '@/components/layoutHeader';
 import { Outlet } from 'react-router';
+import TabsManager from '@/components/tabsManager';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -34,6 +35,16 @@ const Home: React.FC = () => {
           height: '100%'
         }}>
           <CustomBreadcrumb />
+
+          <div className="tabs-container" style={{
+            flexShrink: 0,
+            background: colorBgContainer,
+            borderRadius: `${borderRadiusLG}px ${borderRadiusLG}px 0 0`,
+            marginBottom: 0
+          }}>
+            <TabsManager />
+          </div>
+
           <div
             style={{
               flex: 1,
