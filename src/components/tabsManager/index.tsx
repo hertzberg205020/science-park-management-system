@@ -5,14 +5,17 @@ import { MoreOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveTab, removeTab, removeOtherTabs, removeAllTabs } from '@/store/tabs/tabsSlice';
 import './index.scss';
+import { useNavigate } from 'react-router';
 
 const TabsManager: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { activeKey, items } = useAppSelector(state => state.tabsSlice);
 
   // Tab 切換處理
   const handleTabChange = (key: string) => {
     dispatch(setActiveTab(key));
+    navigate(key);
   };
 
   // Tab 關閉處理
