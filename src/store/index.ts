@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './login/authSlice';
 import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
 import tenementSlice from './tenement/tenementSlice';
+import tabsSlice from './tabs/tabsSlice';
 
 export const store = configureStore({
   reducer: {
     authSlice,
     tenementSlice,
+    tabsSlice
   }
 });
 
