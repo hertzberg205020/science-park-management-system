@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import icons from './icons';
 import logo from '@/assets/logo.png';
 import './index.scss';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { useLocation, useNavigate } from 'react-router';
+import { addTab } from '@/store/tabs/tabsSlice';
 
 interface MenuItem {
   key: string;
@@ -32,19 +33,45 @@ function convertToMenuItem(nodes: MenuItemInRow[]): MenuItem[] {
   });
 }
 
-
+// 遞迴查找選單項目資訊
+function findMenuItemByKey(menuList: MenuItemInRow[], key: string): MenuItemInRow | null {
+  for (const item of menuList) {
+    if (item.key === key) {
+      return item;
+    }
+    if (item.children) {
+      const found = findMenuItemByKey(item.children, key);
+      if (found) return found;
+    }
+  }
+  return null;
+}
 
 const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
   const [menuTree, setMenuTree] = useState<MenuItem[]>([]);
   const data = useAppSelector(state => state.authSlice.menuList);
   const { token } = useAppSelector(state => state.authSlice);
+  const { activeKey } = useAppSelector(state => state.tabsSlice);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleMenuItemClick = ({ key }: { key: string }) => {
-    // Handle menu item click
-    navigate(key);
+    // 查找選單項目資訊
+    const menuItem = findMenuItemByKey(data, key);
 
+
+    if (menuItem) {
+      // 建立新 Tab
+      dispatch(addTab({
+        key: menuItem.key,
+        label: menuItem.label,
+        closable: menuItem.key !== '/dashboard' // 首頁不可關閉
+      }));
+    }
+
+    // 導航到對應路由
+    navigate(key);
   }
 
 
@@ -63,7 +90,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
       </div>
       <Menu
         defaultSelectedKeys={['/dashboard']}
-        selectedKeys={[location.pathname]}
+        selectedKeys={[activeKey || location.pathname]}
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
