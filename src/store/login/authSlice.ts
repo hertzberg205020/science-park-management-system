@@ -1,4 +1,4 @@
-import type { MenuItemInRow } from '@/api/users';
+import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {

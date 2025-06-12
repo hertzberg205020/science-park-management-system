@@ -1,3 +1,4 @@
+import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { get, post, } from '@/utils/http/request';
 
 
@@ -19,12 +20,6 @@ export async function login(data: LoginData): Promise<LoginResponse> {
   return res.data;
 }
 
-export interface MenuItemInRow {
-  key: string;
-  label: string;
-  icon?: string;
-  children?: MenuItemInRow[] | null;
-}
 
 export async function getMenu(): Promise<MenuItemInRow[]> {
   const res = await get<MenuItemInRow[]>('/menu')

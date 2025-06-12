@@ -1,12 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import BASE_ROUTES from './router'
 import { useAppDispatch, useAppSelector } from './store'
-import { getMenu, type MenuItemInRow } from './api/users';
+import { getMenu } from './api/users';
 import { setMenuList } from './store/login/authSlice';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { generateRoutes, type MenuNode } from './utils/generateRoutes';
 import type { RouteObject } from 'react-router';
 import { Spin } from 'antd';
+import type { MenuItemInRow } from './types/MenuItemInRow';
 
 
 function convertToMenuItem(rows: MenuItemInRow[]): MenuNode[] {
