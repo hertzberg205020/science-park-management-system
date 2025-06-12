@@ -1,4 +1,3 @@
-import { type MenuItemInRow } from '@/api/users';
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import icons from './icons';
@@ -7,6 +6,7 @@ import './index.scss';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useLocation, useNavigate } from 'react-router';
 import { addTab } from '@/store/tabs/tabsSlice';
+import type { MenuItemInRow } from '@/types/MenuItemInRow';
 
 interface MenuItem {
   key: string;
