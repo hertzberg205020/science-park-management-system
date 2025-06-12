@@ -7,7 +7,7 @@ import { Outlet, useLocation } from 'react-router';
 import TabsManager from '@/components/tabsManager';
 import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { addTab, setActiveTab } from '@/store/tabs/tabsSlice';
+import { addTab } from '@/store/tabs/tabsSlice';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,7 +30,7 @@ const Home: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { menuList } = useAppSelector(state => state.authSlice);
-  const { items } = useAppSelector(state => state.tabsSlice);
+  // const { items } = useAppSelector(state => state.tabsSlice);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -40,23 +40,34 @@ const Home: React.FC = () => {
     const currentPath = location.pathname;
 
     // 檢查當前路徑是否已經有 Tab
-    const existingTab = items.find(item => item.key === currentPath);
+    // const existingTab = items.find(item => item.key === currentPath);
 
-    if (existingTab) {
-      // 如果已存在，只需切換
-      dispatch(setActiveTab(currentPath));
-    } else {
-      // 如果不存在，查找選單項目並建立新 Tab
-      const menuItem = findMenuItemByKey(menuList, currentPath);
-      if (menuItem) {
-        dispatch(addTab({
-          key: menuItem.key,
-          label: menuItem.label,
-          closable: menuItem.key !== '/dashboard'
-        }));
-      }
+    // if (existingTab) {
+    //   // 如果已存在，只需切換
+    //   dispatch(setActiveTab(currentPath));
+    // } else {
+    //   // 如果不存在，查找選單項目並建立新 Tab
+    //   const menuItem = findMenuItemByKey(menuList, currentPath);
+    //   if (menuItem) {
+    //     dispatch(addTab({
+    //       key: menuItem.key,
+    //       label: menuItem.label,
+    //       closable: menuItem.key !== '/dashboard'
+    //     }));
+
+    //   }
+    // }
+
+    const menuItem = findMenuItemByKey(menuList, currentPath);
+    if (menuItem) {
+      dispatch(addTab({
+        key: menuItem.key,
+        label: menuItem.label,
+        closable: menuItem.key !== '/dashboard'
+      }));
+
     }
-  }, [location.pathname, dispatch, menuList, items]);
+  }, [location.pathname, dispatch, menuList]);
 
   return (
     <Layout style={{ height: '100vh' }}>

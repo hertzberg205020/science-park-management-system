@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tabs, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
@@ -12,10 +12,17 @@ const TabsManager: React.FC = () => {
   const navigate = useNavigate();
   const { activeKey, items } = useAppSelector(state => state.tabsSlice);
 
+  // 監聽 activeKey 變化，自動導航（用於處理關閉 Tab 後的導航）
+  useEffect(() => {
+    if (activeKey) {
+      navigate(activeKey);
+    }
+  }, [activeKey, navigate]);
+
+
   // Tab 切換處理
   const handleTabChange = (key: string) => {
     dispatch(setActiveTab(key));
-    navigate(key);
   };
 
   // Tab 關閉處理

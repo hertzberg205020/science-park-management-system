@@ -43,20 +43,20 @@ const tabsSlice = createSlice({
     // 移除 Tab
     removeTab: (state, action: PayloadAction<string>) => {
       const tabKey = action.payload;
+
+      // 如果沒有 Tab，則不執行任何操作
+      if (state.items.length <= 0) {
+        return;
+      }
+
       const tabIndex = state.items.findIndex(item => item.key === tabKey);
 
-      if (tabIndex > -1) {
-        state.items.splice(tabIndex, 1);
-
-        // 如果關閉的是當前活躍的 Tab，切換到其他 Tab
-        if (state.activeKey === tabKey) {
-          if (state.items.length > 0) {
-            // 優先選擇右邊的 Tab，如果沒有則選擇左邊的
-            const newActiveIndex = tabIndex < state.items.length ? tabIndex : tabIndex - 1;
-            state.activeKey = state.items[newActiveIndex].key;
-          }
-        }
+      if (state.activeKey === tabKey) {
+        const newActiveIndex = tabIndex - 1;
+        state.activeKey = state.items[newActiveIndex].key;
       }
+
+      state.items.splice(tabIndex, 1);
     },
 
     // 關閉其他 Tab
