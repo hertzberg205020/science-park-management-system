@@ -4,8 +4,8 @@ import type { MenuProps } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveTab, removeTab, removeOtherTabs, removeAllTabs } from '@/store/tabs/tabsSlice';
-import './index.scss';
 import { useNavigate } from 'react-router';
+import './index.scss';
 
 const TabsManager: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -15,14 +15,16 @@ const TabsManager: React.FC = () => {
   // 監聽 activeKey 變化，自動導航（用於處理關閉 Tab 後的導航）
   useEffect(() => {
     if (activeKey) {
-      navigate(activeKey);
+      navigate(activeKey, { replace: true });
     }
   }, [activeKey, navigate]);
 
 
   // Tab 切換處理
   const handleTabChange = (key: string) => {
-    dispatch(setActiveTab(key));
+    if (key !== activeKey) {
+      dispatch(setActiveTab(key));
+    }
   };
 
   // Tab 關閉處理
