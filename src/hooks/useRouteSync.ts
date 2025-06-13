@@ -28,6 +28,8 @@ export const useRouteSync = () => {
 
     const menuItem = findMenuItemByKey(menuList, currentPath);
 
+    // 當 activeKey 變化時，tabsManager 會自動導航到對應的路由
+    // navigate 的職責為 tabsManager
     if (menuItem) {
       dispatch(addTab({
         key: menuItem.key,
