@@ -6,7 +6,7 @@ export interface TabItem {
   closable: boolean;    // 是否可關閉
 }
 
-export interface TabsState {
+interface TabsState {
   activeKey: string; // 當前展示的 Tab 的 key
   items: TabItem[]; // 所有 Tab 的列表
 }
@@ -18,6 +18,7 @@ const DEFAULT_HOME_TAB: TabItem = {
   label: 'Dashboard',
   closable: false
 };
+
 
 /**
  * 檢查物件是否為有效的 TabItem
