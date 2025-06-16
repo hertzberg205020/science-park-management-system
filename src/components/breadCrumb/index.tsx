@@ -1,5 +1,6 @@
-import type { MenuItemInRow } from '@/api/users';
+
 import { useAppSelector } from '@/store';
+import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { Breadcrumb } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
@@ -34,6 +35,7 @@ const _recursiveFind = (path: string, data: MenuItemInRow[]): string[] => {
 const CustomBreadcrumb: React.FC = () => {
   const location = useLocation();
   const { menuList } = useAppSelector(state => state.authSlice);
+  const { activeKey } = useAppSelector(state => state.tabsSlice);
   const cacheRef = useRef<Map<string, string[]>>(new Map());
 
   const findBreadcrumbPath = (path: string, data: MenuItemInRow[]): string[] => {
@@ -62,7 +64,8 @@ const CustomBreadcrumb: React.FC = () => {
   }, [menuList]);
 
 
-  const labels = findBreadcrumbPath(location.pathname, menuList);
+  const currentPath = activeKey || location.pathname;
+  const labels = findBreadcrumbPath(currentPath, menuList);
   const items = labels.map(e => ({ title: e }))
 
 
