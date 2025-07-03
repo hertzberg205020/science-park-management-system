@@ -1,5 +1,5 @@
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from "axios";
-import { message } from "antd";
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
+import { message } from 'antd';
 import { store } from '@/store';
 
 const BASE_URL: string = import.meta.env.VITE_API_URL;
@@ -42,7 +42,7 @@ http.interceptors.response.use((config: AxiosResponse) => {
   }
 
   return config.data;
-})
+});
 
 
 export default http;

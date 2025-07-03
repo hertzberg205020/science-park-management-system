@@ -1,5 +1,5 @@
-import type { TenementDataType } from '@/types/tenement'
-import { Badge, Progress, Tag, type TableProps } from 'antd'
+import type { TenementDataType } from '@/types/tenement';
+import { Badge, Progress, Tag, type TableProps } from 'antd';
 
 /**
  * 大樓管理列表欄位設定
@@ -56,7 +56,7 @@ const columns: TableProps<TenementDataType>['columns'] = [
     key: 'vacancyRate',
     render: (value: number) => {
       const displayValue = typeof value === 'number' && value >= 0 ? Number((value * 100).toFixed(4)) : 0;
-      return (<Progress percent={displayValue} status="active" />)
+      return (<Progress percent={displayValue} status="active" />);
     }
   },
   {

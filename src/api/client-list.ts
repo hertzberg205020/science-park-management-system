@@ -12,15 +12,15 @@ export function getClientList(data: {
     list: CompanyDataType[],
     total: number
   }>> {
-  return get('/client-list', data)
+  return get('/client-list', data);
 }
 
 export function deleteClient(id: string): Promise<ApiResponse<string>> {
-  return post('/client/delete', { id })
+  return post('/client/delete', { id });
 }
 
 export function batchDeleteClient(ids: React.Key[]): Promise<ApiResponse<string>> {
-  return post('/client/batch-delete', { ids })
+  return post('/client/batch-delete', { ids });
 }
 
 type UpsertClientDataType = Omit<CompanyDataType, 'id'> & {
@@ -28,5 +28,5 @@ type UpsertClientDataType = Omit<CompanyDataType, 'id'> & {
 };
 
 export function upsertClient(data: UpsertClientDataType): Promise<ApiResponse<string>> {
-  return post('/client/upsert', data)
+  return post('/client/upsert', data);
 }

@@ -16,12 +16,12 @@ export const EnergyFigure: React.FC = () => {
       try {
         const res = await getEnergyData();
         if (!res || res.length === 0) {
-          setError("No data available");
+          setError('No data available');
           return;
         }
         setEnergyData(res);
       } catch {
-        setError("Failed to load energy data");
+        setError('Failed to load energy data');
       } finally {
         setLoading(false);
       }
@@ -60,6 +60,6 @@ export const EnergyFigure: React.FC = () => {
       {!loading && !error && <ReactECharts option={energyConfig} />}
     </>
   );
-}
+};
 
 export default EnergyFigure;

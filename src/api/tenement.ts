@@ -27,5 +27,5 @@ export async function getData(option: GetDataOption): Promise<PaginatedResponse<
 }
 
 export function upsertTenement(data: CreateTenementDataType): Promise<ApiResponse<string>> {
-  return post('/tenement/upsert', data)
+  return post('/tenement/upsert', data);
 }

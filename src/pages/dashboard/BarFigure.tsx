@@ -1,4 +1,4 @@
-import ReactECharts from "echarts-for-react"
+import ReactECharts from 'echarts-for-react';
 
 const option: Record<string, unknown> = {
   title: {
@@ -23,7 +23,7 @@ const option: Record<string, unknown> = {
   xAxis: {
     type: 'category',
     boundaryGap: [0, 0.01],
-    data: ['2014', '2016', '2018', '2020', '2022', "2024"]
+    data: ['2014', '2016', '2018', '2020', '2022', '2024']
   },
   yAxis: {
     type: 'value',
@@ -55,6 +55,6 @@ const BarFigure: React.FC = () => {
       <ReactECharts option={option}></ReactECharts>
     </>
   );
-}
+};
 
 export default BarFigure;

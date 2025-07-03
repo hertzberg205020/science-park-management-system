@@ -1,6 +1,6 @@
 import { Card, Col, Progress, Row, Statistic, Tag, Timeline } from 'antd';
 import { icons } from './icons';
-import './index.scss'
+import './index.scss';
 import EnergyFigure from './EnergyFigure';
 import BarFigure from './BarFigure';
 import PieFigure from './PieFigure';
@@ -71,7 +71,7 @@ const generateCards = (data: CardInfo[]) => {
       </Card>
     </Col>
   ));
-}
+};
 
 const Dashboard: React.FC = () => {
 
@@ -109,7 +109,7 @@ const Dashboard: React.FC = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card title="Real-time Vehicle Information" style={{ height: "406px" }}>
+          <Card title="Real-time Vehicle Information" style={{ height: '406px' }}>
             <div className="wrap" style={{ paddingTop: '45px' }}>
               <Timeline items={items} />
             </div>

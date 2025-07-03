@@ -1,5 +1,5 @@
 
-import ReactECharts from "echarts-for-react"
+import ReactECharts from 'echarts-for-react';
 
 const option: Record<string, unknown> = {
   legend: {
@@ -36,6 +36,6 @@ const PieFigure: React.FC = () => {
       <ReactECharts option={option}></ReactECharts>
     </>
   );
-}
+};
 
 export default PieFigure;
