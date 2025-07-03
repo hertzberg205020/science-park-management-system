@@ -1,7 +1,7 @@
-import logo from '@/assets/logo.png'
-import backgroundPicture from '@/assets/bg.jpg'
-import loginBackground from '@/assets/login-background.png'
-import './index.scss'
+import logo from '@/assets/logo.png';
+import backgroundPicture from '@/assets/bg.jpg';
+import loginBackground from '@/assets/login-background.png';
+import './index.scss';
 import { Button, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '@/api/users';

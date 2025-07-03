@@ -53,7 +53,7 @@ const LayoutHeader: React.FC = () => {
       default:
         console.log('Unknown action');
     }
-  }
+  };
 
   return (
     <div>

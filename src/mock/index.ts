@@ -1,7 +1,8 @@
 import Mock from 'mockjs';
-import { menuList, userMenuList, managerMenuList } from './menus';
+
 import type { TenementDataType } from '@/types/tenement';
 import type { PaginatedResponse } from '@/types/PaginatedResponse';
+import { adminPermissions, managerPermissions, userPermissions } from '@/mock/menus';
 
 // simulate network delay 200-600ms
 Mock.setup({
@@ -22,7 +23,7 @@ const getQueryParams = (url: string): Record<string, string> => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Mock.mock(`${BASE_URL}/login`, "post", (options: any): any => {
+Mock.mock(`${BASE_URL}/login`, 'post', (options: any): any => {
 
   const { account, password } = JSON.parse(options.body);
 
@@ -72,49 +73,62 @@ Mock.mock(`${BASE_URL}/login`, "post", (options: any): any => {
 });
 
 
-// menu web API
-Mock.mock(`${BASE_URL}/menu`, "get", () => {
-  const token = sessionStorage.getItem("token");
-  if (token == "mocktoken123456admin") {
-    return {
-      code: 200,
-      message: 'success',
-      data: menuList
-    }
-  } else if (token == "mocktoken123456user") {
-    return {
-      code: 200,
-      message: 'success',
-      data: userMenuList
-    }
-  } else if (token == "mocktoken123456manager") {
-    return {
-      code: 200,
-      message: 'success',
-      data: managerMenuList
-    }
-  } else {
-    return {
-      code: 200,
-      message: "fail",
-      data: []
-    }
-  }
-})
+// 權限 API mock
+Mock.mock(`${BASE_URL}/permissions`, 'get', () => {
+  const token = sessionStorage.getItem('token');
 
-Mock.mock(`${BASE_URL}/energyData`, "get", () => {
+  let permissions: string[] = [];
+
+  if (token === 'mocktoken123456admin') {
+    permissions = adminPermissions;
+  } else if (token === 'mocktoken123456user') {
+    permissions = userPermissions;
+  } else if (token === 'mocktoken123456manager') {
+    permissions = managerPermissions;
+  }
+
   return {
     code: 200,
-    message: "Request successful",
-    data: [
-      { name: "Coal", data: [120, 132, 101, 134, 90, 230, 210] },
-      { name: "Gas", data: [220, 182, 191, 234, 290, 330, 310] },
-      { name: "Oil", data: [150, 232, 201, 154, 190, 330, 410] },
-      { name: "Electricity", data: [320, 332, 301, 334, 390, 330, 320] },
-      { name: "Heat", data: [820, 932, 901, 934, 1290, 1330, 1320] }
-    ]
+    message: 'success',
+    data: permissions
+  };
+});
+
+// 保持舊的 /menu API 以維持相容性，但返回權限而非選單
+Mock.mock(`${BASE_URL}/menu`, 'get', () => {
+  console.warn('/menu API 已過時，請使用 /permissions');
+  const token = sessionStorage.getItem('token');
+
+  let permissions: string[] = [];
+
+  if (token === 'mocktoken123456admin') {
+    permissions = adminPermissions;
+  } else if (token === 'mocktoken123456user') {
+    permissions = userPermissions;
+  } else if (token === 'mocktoken123456manager') {
+    permissions = managerPermissions;
   }
-})
+
+  return {
+    code: 200,
+    message: 'success',
+    data: permissions
+  };
+});
+
+Mock.mock(`${BASE_URL}/energyData`, 'get', () => {
+  return {
+    code: 200,
+    message: 'Request successful',
+    data: [
+      { name: 'Coal', data: [120, 132, 101, 134, 90, 230, 210] },
+      { name: 'Gas', data: [220, 182, 191, 234, 290, 330, 310] },
+      { name: 'Oil', data: [150, 232, 201, 154, 190, 330, 410] },
+      { name: 'Electricity', data: [320, 332, 301, 334, 390, 330, 320] },
+      { name: 'Heat', data: [820, 932, 901, 934, 1290, 1330, 1320] }
+    ]
+  };
+});
 
 Mock.Random.extend({
   taiwanPhone: function () {
@@ -152,65 +166,65 @@ Mock.Random.extend({
 
 // 公司資料列表的介面
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Mock.mock(new RegExp(`${BASE_URL}/client-list.*`), "get", (options: any) => {
+Mock.mock(new RegExp(`${BASE_URL}/client-list.*`), 'get', (options: any) => {
   const { pageSize, page, name, contact, phone } = getQueryParams(options.url);
-  console.log("公司列表接收到 query string", page, pageSize, name, contact, phone);
+  console.log('公司列表接收到 query string', page, pageSize, name, contact, phone);
 
   return {
     code: 200,
-    message: "success",
+    message: 'success',
     data: Mock.mock({
       [`list|${pageSize}`]: [
         {
-          "id": "@unifiedBusinessNumber", // 使用統一編號作為ID
-          "name": "@taiwanCompanyName", // 台灣公司名稱
-          "status|1": ["核准設立", "停業", "解散", "撤銷", "廢止"], // 台灣公司狀態
-          "phoneNumber": "@taiwanPhone", // 台灣電話號碼
-          "industryCategory|1": ['製造業', '資訊服務業', '金融保險業', '批發零售業', '專業科學及技術服務業', '營建工程業', '運輸倉儲業'],
-          "email": "@email",
-          "unifiedBusinessNumber": "@unifiedBusinessNumber", // 台灣統一編號 (8位數字)
-          "industryCode|1": ['F101', 'J201', 'I301', 'C501', 'G801', 'H701', 'D401'], // 模擬行業代碼
-          "responsiblePerson": "@last", // 公司負責人姓名
+          'id': '@unifiedBusinessNumber', // 使用統一編號作為ID
+          'name': '@taiwanCompanyName', // 台灣公司名稱
+          'status|1': ['核准設立', '停業', '解散', '撤銷', '廢止'], // 台灣公司狀態
+          'phoneNumber': '@taiwanPhone', // 台灣電話號碼
+          'industryCategory|1': ['製造業', '資訊服務業', '金融保險業', '批發零售業', '專業科學及技術服務業', '營建工程業', '運輸倉儲業'],
+          'email': '@email',
+          'unifiedBusinessNumber': '@unifiedBusinessNumber', // 台灣統一編號 (8位數字)
+          'industryCode|1': ['F101', 'J201', 'I301', 'C501', 'G801', 'H701', 'D401'], // 模擬行業代碼
+          'responsiblePerson': '@last', // 公司負責人姓名
         },
       ],
       total: 78
     })
-  }
+  };
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(`${BASE_URL}/client/delete`, 'post', (options: any) => {
   const { id } = JSON.parse(options.body);
-  console.log("刪除客戶", id);
+  console.log('刪除客戶', id);
   return {
     code: 200,
-    message: "success",
-    data: "刪除成功"
-  }
-})
+    message: 'success',
+    data: '刪除成功'
+  };
+});
 
 // 批量刪除
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(`${BASE_URL}/client/batch-delete`, 'post', (options: any) => {
   const { ids } = JSON.parse(options.body);
-  console.log("ids", ids)
+  console.log('ids', ids);
   return {
     code: 200,
-    message: "success",
-    data: "刪除成功"
-  }
-})
+    message: 'success',
+    data: '刪除成功'
+  };
+});
 
 // 編輯客戶
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(`${BASE_URL}/client/upsert`, 'post', (options: any) => {
-  console.log("編輯客戶收到參數", JSON.parse(options.body))
+  console.log('編輯客戶收到參數', JSON.parse(options.body));
   return {
     code: 200,
-    message: "success",
-    data: "操作成功"
-  }
-})
+    message: 'success',
+    data: '操作成功'
+  };
+});
 
 const tenementTemplate = {
   id: '@id',
@@ -283,23 +297,23 @@ Mock.mock(new RegExp(`${BASE_URL}/tenement.*`), 'get', (options: any) => {
   const parsedPageSize = parseInt(pageSize, 10) || 10;
   const parsedPage = parseInt(page, 10) || 1;
 
-  console.log("公司列表接收到 query string", page, pageSize);
+  console.log('公司列表接收到 query string', page, pageSize);
 
   const mockData = generatePaginatedTenementData(parsedPage, parsedPageSize);
 
   return {
     code: 200,
-    message: "success",
+    message: 'success',
     data: mockData
-  }
+  };
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Mock.mock(`${BASE_URL}/tenement/upsert`, 'post', (options: any) => {
-  console.log("編輯客戶收到參數", JSON.parse(options.body))
+  console.log('編輯客戶收到參數', JSON.parse(options.body));
   return {
     code: 200,
-    message: "success",
-    data: "操作成功"
-  }
-})
+    message: 'success',
+    data: '操作成功'
+  };
+});

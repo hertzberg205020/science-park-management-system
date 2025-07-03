@@ -153,27 +153,3 @@ export const PERMISSION_ROUTE_MAP: Record<Permission, RouteInfo> = {
     icon: 'UserOutlined'
   }
 };
-
-// 父級選單資訊
-export const PARENT_MENU_INFO: Record<string, { label: string; description: string; icon: string }> = {
-  '/users': {
-    label: 'Tenant Management',
-    description: '客戶管理',
-    icon: 'TeamOutlined'
-  },
-  '/property-management': {
-    label: 'Property Management',
-    description: '物業管理',
-    icon: 'LaptopOutlined'
-  },
-  '/finance': {
-    label: 'Financial Management',
-    description: '財務管理',
-    icon: 'DollarOutlined'
-  },
-  '/operation-center': {
-    label: 'Operations Management',
-    description: '運營管理',
-    icon: 'FundProjectionScreenOutlined'
-  }
-};

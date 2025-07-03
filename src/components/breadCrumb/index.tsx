@@ -1,11 +1,11 @@
 
 import { useAppSelector } from '@/store';
-import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { Breadcrumb } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
+import { type MenuItemForDisplay, menuNodes } from '@/utils/permissionRouteGenerator.tsx';
 
-const _recursiveFind = (path: string, data: MenuItemInRow[]): string[] => {
+const _recursiveFind = (path: string, data: MenuItemForDisplay[]): string[] => {
 
   if (!path || path.trim() === '') {
     return [];
@@ -29,16 +29,17 @@ const _recursiveFind = (path: string, data: MenuItemInRow[]): string[] => {
     }
   }
   return [];
-}
+};
 
 
 const CustomBreadcrumb: React.FC = () => {
   const location = useLocation();
-  const { menuList } = useAppSelector(state => state.authSlice);
+  const { permissions } = useAppSelector(state => state.authSlice);
   const { activeKey } = useAppSelector(state => state.tabsSlice);
   const cacheRef = useRef<Map<string, string[]>>(new Map());
 
-  const findBreadcrumbPath = (path: string, data: MenuItemInRow[]): string[] => {
+
+  const findBreadcrumbPath = (path: string, data: MenuItemForDisplay[]): string[] => {
 
     if (!path || path.trim() === '') {
       return [];
@@ -56,17 +57,17 @@ const CustomBreadcrumb: React.FC = () => {
 
     // Return the breadcrumb path
     return breadcrumbPath;
-  }
+  };
 
   useEffect(() => {
     // Clear the cache when the component mounts
     cacheRef.current.clear();
-  }, [menuList]);
+  }, [permissions]);
 
 
   const currentPath = activeKey || location.pathname;
-  const labels = findBreadcrumbPath(currentPath, menuList);
-  const items = labels.map(e => ({ title: e }))
+  const labels = findBreadcrumbPath(currentPath, menuNodes);
+  const items = labels.map(e => ({ title: e }));
 
 
   return (
