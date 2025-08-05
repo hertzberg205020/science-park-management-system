@@ -23,15 +23,49 @@ export const PERMISSIONS = {
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
 
-// 權限到路由資訊的對照表
+/**
+ * Describes route and menu information for a permission.
+ *
+ * @property path - Route path for React Router.
+ * @property label - Display name for menu or navigation.
+ * @property description - Feature description for UI or documentation.
+ * @property icon - Ant Design icon name (optional).
+ * @property parentPath - Parent route path for nested menus (optional).
+ */
 export interface RouteInfo {
   path: string;
   label: string;
   description: string;
   icon?: string;
-  parentPath?: string; // 用於巢狀選單
+  parentPath?: string;
 }
 
+/**
+ * Maps each Permission to its corresponding RouteInfo.
+ *
+ * @remarks
+ * This mapping centralizes all route and menu information for
+ * permission-based navigation and UI construction.
+ *
+ * @structure
+ * Each Permission key maps to a RouteInfo object:
+ *   - {@link RouteInfo.path} — Route path for React Router
+ *   - {@link RouteInfo.label} — Menu display name
+ *   - {@link RouteInfo.description} — Feature description
+ *   - {@link RouteInfo.icon} — Ant Design icon name (optional)
+ *   - {@link RouteInfo.parentPath} — Parent route path for nested menus (optional)
+ *
+ * @usage
+ * - Dynamically build routes and menus based on user permissions.
+ * - Support direct access to hidden pages (e.g., edit/detail pages).
+ * - Allow routes to carry parameters (URL params, query strings, state).
+ *
+ * @design
+ * - Separation of concerns: Permissions only determine accessible routes.
+ *   UI structure is controlled by the frontend.
+ * - Extensible and maintainable: Add or modify permissions/routes by updating this map.
+ * - Consistency: Centralized management reduces duplication and ensures uniformity.
+ */
 export const PERMISSION_ROUTE_MAP: Record<Permission, RouteInfo> = {
   [PERMISSIONS.DASHBOARD_READ]: {
     path: '/dashboard',
