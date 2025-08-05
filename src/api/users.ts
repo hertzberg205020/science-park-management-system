@@ -1,5 +1,4 @@
 import type { Permission } from '@/constants/permissions';
-import type { MenuItemInRow } from '@/types/MenuItemInRow';
 import { get, post } from '@/utils/http/request';
 
 
@@ -34,13 +33,5 @@ export async function login(data: LoginData): Promise<LoginResponse> {
  */
 export async function getUserPermissions(): Promise<Permission[]> {
   const res = await get<Permission[]>('/permissions');
-  return res.data;
-}
-
-/**
- * deprecated: 這個函式已經不再使用，請改用 getUserPermissions
- */
-export async function getMenu(): Promise<MenuItemInRow[]> {
-  const res = await get<MenuItemInRow[]>('/menu');
   return res.data;
 }

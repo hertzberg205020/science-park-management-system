@@ -8,8 +8,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { addTab } from '@/store/tabs/tabsSlice';
 import {
   generateMenuFromPermissions,
-  type MenuItemForDisplay } from '@/utils/permissionRouteGenerator.tsx';
-import { PERMISSION_ROUTE_MAP } from '@/constants/permissions.ts';
+  type MenuItemForDisplay, menuNodes
+} from '@/utils/permissionRouteGenerator.tsx';
 
 /**
  * Antd Menu 元件使用的選單項目格式
@@ -58,18 +58,37 @@ function convertToAntdMenuItem(nodes: MenuItemForDisplay[]): AntdMenuItem[] {
  * 而是直接從權限路由對映表中取得資訊。
  * 這種方式更加直接且可靠。
  */
-function findMenuItemInfoByPath(path: string) {
-  // 從權限路由對映表中查找對應的資訊
-  for (const [_, routeInfo] of Object.entries(PERMISSION_ROUTE_MAP)) {
-    if (routeInfo.path === path) {
+function findMenuItemInfoByPath(path: string, nodes: MenuItemForDisplay[]): {
+    key: string;
+    label: string;
+    description: string;
+} {
+  // 依據 menuNodes 中的路由資訊查找對應的選單項目
+  if (!path) {
+    throw new Error('路徑不能為空');
+  }
+
+  // 走訪權限路由對映表，查找對應的路由資訊
+  for (const node of nodes) {
+    if (node.key === path) {
       return {
-        key: routeInfo.path,
-        label: routeInfo.label,
-        description: routeInfo.description
+        key: node.key,
+        label: node.label,
+        description: node.description || ''
       };
     }
+
+    if (path.startsWith(node.key) && node.children && node.children.length > 0) {
+      // 如果當前節點有子節點，遞迴查找
+      const childResult = findMenuItemInfoByPath(path, node.children);
+      if (childResult) {
+        return childResult;
+      }
+    }
   }
-  return null;
+
+
+  throw new Error('找不到對應的選單項目資訊');
 }
 
 
@@ -105,7 +124,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ collapsed }) => {
   const handleMenuItemClick = ({ key }: { key: string }) => {
     try {
       // 查找選單項目資訊
-      const menuItemInfo = findMenuItemInfoByPath(key);
+      const menuItemInfo = findMenuItemInfoByPath(key, menuNodes);
 
       if (menuItemInfo) {
         // 建立新標籤頁
